@@ -2,4 +2,7 @@
 //
 // Please see the included LICENSE file for more information.
 
-#include "hugin.h"
+namespace hugin_api
+{
+
+}
