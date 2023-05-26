@@ -4,7 +4,5 @@
 
 namespace hugin_api
 {
-    class HuginApi
-    {
-    }
+
 } // namespace hugin_api
