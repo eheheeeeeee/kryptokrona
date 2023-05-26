@@ -32,5 +32,47 @@ namespace hugin_api
         typedef std::function<void(const common::JsonValue &json_rpc_params, common::JsonValue &json_response)> HandlerFunction;
 
         template <typename RequestType, typename ResponseType, typename RequestHandler>
+
+        HandlerFunction jsonHandler(RequestHandler handler)
+        {
+            return [handler, this](const common::JsonValue &json_rpc_params, common::JsonValue &json_response) mutable
+            {
+                RequestType request;
+                ResponseType response;
+
+                try
+                {
+                    cryptonote::JsonInputValueSerializer input_serializer(const_cast<common::JsonValue &>(json_rpc_params));
+                    SerializeRequest(request, input_serializer);
+                }
+                catch (std::exception &)
+                {
+                    makeGenericErrorResponse(json_response, "Invalid Request", -32600);
+                    return;
+                }
+
+                std::error_code ec = handler(request, response);
+                if (ec)
+                {
+                    makeErrorResponse(ec, json_response);
+                    return;
+                }
+
+                cryptonote::JsonOutputStreamSerializer output_serializer;
+                SerializeResponse(response, output_serializer);
+                json_response = output_serializer.getValue();
+            };
+
+            template <typename RequestType, typename ResponseType, typename RequestHandler>
+
+            void SerializeRequest(RequestType & request, cryptonote::JsonInputValueSerializer & input_serializer)
+            {
+                request.Serialize(input_serializer);
+            }
+
+            // add more requests here as needed
+
+            std::unordered_map<std::string, HandlerFunction> handlers;
+        }
     }
 } // namespace hugin_api
