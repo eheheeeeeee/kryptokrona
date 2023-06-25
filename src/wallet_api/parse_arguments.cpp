@@ -21,10 +21,14 @@ Config parseArguments(int argc, char **argv)
 
     cxxopts::Options options(argv[0], cryptonote::getProjectCLIHeader());
 
-    bool help, version;
+    bool help, version; noConsole;
 
     options.add_options("Core")("h,help", "Display this help message", cxxopts::value<bool>(help)->implicit_value("true"))
 
+        ("no-console",
+         "If set, will not provide an interactive console",
+         cxxopts::value<bool>(noConsole)->default_value("false")->implicit_value("true"))
+        
         ("v,version", "Output software version information", cxxopts::value<bool>(version)->default_value("false")->implicit_value("true"));
 
     options.add_options("Network")("p,port", "The port to listen on for http requests",
@@ -63,6 +67,12 @@ Config parseArguments(int argc, char **argv)
         std::cout << options.help({}) << std::endl;
         exit(0);
     }
+
+    if (noConsole)
+    {
+        config.noConsole = true;
+    }
+        
     else if (version) // Do we want to display the software version?
     {
         std::cout << cryptonote::getProjectCLIHeader() << std::endl;
