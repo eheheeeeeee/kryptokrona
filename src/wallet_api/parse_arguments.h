@@ -20,6 +20,9 @@ struct Config
 
     /* The value to use with the 'Access-Control-Allow-Origin' header */
     std::string corsHeader;
+
+     /* Controls whether an interactive console is provided */
+    bool noConsole = false;
 };
 
 Config parseArguments(int argc, char **argv);
