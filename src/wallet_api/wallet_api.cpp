@@ -55,6 +55,11 @@ int main(int argc, char **argv)
         std::cout << "The api has been launched on " << address
                   << ".\nType exit to save and shutdown." << std::endl;
 
+        if (!config.noConsole)
+        {
+            std::cout << "Type exit to save and shutdown." << std::endl;
+        }
+
         while (!ctrl_c)
         {
             std::string input;
