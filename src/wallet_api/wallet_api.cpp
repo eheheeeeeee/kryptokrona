@@ -60,7 +60,7 @@ int main(int argc, char **argv)
             std::cout << "Type exit to save and shutdown." << std::endl;
         }
 
-while (!ctrl_c)
+        while (!ctrl_c)
         {
             /* If we are providing an interactive console we will do so here. */
             if (!config.noConsole)
